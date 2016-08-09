@@ -180,18 +180,22 @@ def writemd(mov):
     li.append('##### 简介  \n')
     li.append('%s  \n'%(mov.desc))
     li.append('<!--more-->  \n')
-    li.append('### 下载地址:  \n')
-    for durl in mov.dldurl:
-        li.append('[%s](%s)  \n'%(durl,thunderurl(durl)))
-    li.append('### 在线播放地址：  \n')
-    
-    for purl in mov.playurl:
-        indstart = purl.find("collection-")
-        indend = purl.find(".html")
-        li.append('[第%d集](%s)  \n'%(int(purl[indstart+len("collection-"):indend])+1, purl))
+    if (len(mov.dldurl) !=0):
+        li.append('### 下载地址:  \n')
+        for durl in mov.dldurl:
+            li.append('[%s](%s)  \n'%(durl,thunderurl(durl)))
+    if (len(mov.playurl) !=0):
+        li.append('### 在线播放地址：  \n')
+        for purl in mov.playurl:
+            indstart = purl.find("collection-")
+            indend = purl.find(".html")
+            li.append('[第%d集](%s)  \n'%(int(purl[indstart+len("collection-"):indend])+1, purl))
 
     li.append('### 介绍  \n')
     li.append('##### %s\n'%(mov.name))
+    li.append('##### 海报/截图  \n')
+    for img in mov.pic:
+        li.append("![Dydy.cf Picture](%s)  \n"%(img))
     li.append('##### 主演  \n')
     for act in mov.actors:
         li.append('%s  \n'%(act))
@@ -203,15 +207,17 @@ def writemd(mov):
     if (mov.series != ""): 
         li.append("##### 集数  \n")
         li.append("%s  \n"%(mov.series))
-    li.append('##### 海报/截图  \n')
-    for img in mov.pic:
-        li.append("![Dydy.cf Picture](%s)  \n"%(img))
+    li.append("##### 标签分类  \n###### ")
+    for tags in mov.tags:
+        li.append("%s "%(tags))
+    li.append("\n")
+
     li.append('##### 信息原地址  \n')
     li.append("[电影天堂](http://www.dy2018.com/i/%d.html)  \n"%(mov.id))
     f.writelines(li)
     f.close()
 
-for i in range(96260, 97200):
+for i in range(96260, 97200):#(97065, 97066):
     print(i)
     page = getWebpage(i)
     if (page == ""):
